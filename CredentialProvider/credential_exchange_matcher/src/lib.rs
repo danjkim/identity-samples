@@ -93,6 +93,13 @@ fn read_i32(buffer: &[u8], offset: usize) -> i32 {
 // 4. Main Logic
 // -------------------------------------------------------------------------
 
+// Credman expects this as the entry point, but it isn't there if the target is wasm32-unknown-unknown.
+#[cfg(all(target_arch = "wasm32", target_os = "unknown"))]
+#[unsafe(no_mangle)]
+extern "C" fn _start() {
+    main();
+}
+
 #[no_mangle]
 pub extern "C" fn main() -> i32 {
     unsafe {
