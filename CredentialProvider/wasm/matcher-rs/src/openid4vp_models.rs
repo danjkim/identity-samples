@@ -62,6 +62,7 @@ pub struct RegistryCredentials {
 #[nserde(default)]
 pub struct RegistryCredential {
     pub id: String,
+    pub delegation_type: i32,
     pub display: RegistryDisplay,
     pub paths: DeterministicMap<String, JsonValue>, // Recursive structure
 }
@@ -120,6 +121,7 @@ pub struct MatchedClaim<'a> {
 #[derive(Debug, Clone)]
 pub struct MatchedCredential<'a> {
     pub id: &'a str,
+    pub delegation_type: i32,
     pub display: &'a RegistryDisplay,
     pub matched_claim_names: Vec<&'a JsonValue>, // RegistryClaimDisplay
     pub matched_claim_metadata: Vec<&'a [String]>,

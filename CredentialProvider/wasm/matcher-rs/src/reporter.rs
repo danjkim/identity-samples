@@ -77,6 +77,7 @@ fn report_standard_verification_entry(
         selection_metadata_json,
         credential_set_id,
         document_index,
+        matched_credential.delegation_type,
     );
 
     log::trace!(
@@ -455,9 +456,17 @@ mod tests {
             _metadata: &str,
             _set_id: &str,
             _set_index: i32,
+            _delegation_type: i32,
         ) {
             self.added_entries.push(cred_id.to_string());
         }
+        fn set_delegation_type_for_entry_in_set(
+            &mut self,
+            _cred_id: &str,
+            _delegation_type: i32,
+            _set_id: &str,
+            _set_index: i32,
+        ) {}
         fn add_field_to_entry_set(
             &mut self,
             cred_id: &str,
@@ -565,6 +574,7 @@ mod tests {
                 id: "cred1",
                 matched: vec![MatchedCredential {
                     id: "cred1",
+                    delegation_type: 0,
                     display: &display,
                     matched_claim_names: vec![],
                     matched_claim_metadata: vec![],
@@ -676,6 +686,7 @@ mod tests {
                     id,
                     matched: vec![MatchedCredential {
                         id,
+                        delegation_type: 0,
                         display: &display,
                         matched_claim_names: vec![],
                         matched_claim_metadata: vec![],

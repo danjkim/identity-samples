@@ -40,6 +40,14 @@ pub trait CredmanApi {
         metadata: &str,
         set_id: &str,
         set_index: i32,
+        delegation_type: i32,
+    );
+    fn set_delegation_type_for_entry_in_set(
+        &mut self,
+        cred_id: &str,
+        delegation_type: i32,
+        set_id: &str,
+        set_index: i32,
     );
     fn add_field_to_entry_set(
         &mut self,
@@ -238,6 +246,7 @@ impl CredmanApi for CredmanApiImpl {
         metadata: &str,
         set_id: &str,
         set_index: i32,
+        delegation_type: i32,
     ) {
         let cred_id_c = CString::new(cred_id).unwrap();
         let title_c = if title.is_empty() {
@@ -286,6 +295,32 @@ impl CredmanApi for CredmanApiImpl {
                     .map_or(std::ptr::null(), |c| c.as_ptr()),
                 warning_c.as_ref().map_or(std::ptr::null(), |c| c.as_ptr()),
                 metadata_c.as_ref().map_or(std::ptr::null(), |c| c.as_ptr()),
+                set_id_c.as_ptr(),
+                set_index,
+            );
+            if delegation_type != 0 {
+                crate::bindings::SetDelegationTypeForEntryInSet(
+                    cred_id_c.as_ptr(),
+                    delegation_type,
+                    set_id_c.as_ptr(),
+                    set_index,
+                );
+            }
+        }
+    }
+    fn set_delegation_type_for_entry_in_set(
+        &mut self,
+        cred_id: &str,
+        delegation_type: i32,
+        set_id: &str,
+        set_index: i32,
+    ) {
+        let cred_id_c = CString::new(cred_id).unwrap();
+        let set_id_c = CString::new(set_id).unwrap();
+        unsafe {
+            crate::bindings::SetDelegationTypeForEntryInSet(
+                cred_id_c.as_ptr(),
+                delegation_type,
                 set_id_c.as_ptr(),
                 set_index,
             );
